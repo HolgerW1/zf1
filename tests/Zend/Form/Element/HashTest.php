@@ -107,6 +107,23 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($salt, $this->element->getSalt());
         $this->assertEquals('foobar', $this->element->getSalt());
     }
+    
+    public function testSessionHashNameCollision()
+    {
+        $session = $this->element->getSession();
+        $this->element->initCsrfToken();
+        $this->element->initCsrfValidator();
+        $hash = $this->element->getHash();
+
+        $newElement = new Zend_Form_Element_Hash('foo', array(
+                'session' => $session,
+                'salt' => 'foobar'
+        ));
+        $newElement->initCsrfToken();
+        $newElement->initCsrfValidator();
+        
+        $this->assertEquals($hash, $session->hashes[$this->element->getSalt()]);        
+    }
 
     public function testSaltChangesHash()
     {
