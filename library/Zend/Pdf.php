@@ -14,7 +14,7 @@
  *
  * @category   Zend
  * @package    Zend_Pdf
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -78,7 +78,7 @@ require_once 'Zend/Pdf/Element/String.php';
  *
  * @category   Zend
  * @package    Zend_Pdf
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Pdf
@@ -94,8 +94,6 @@ class Zend_Pdf
      * PDF file header.
      */
     const PDF_HEADER  = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
-
-
 
     /**
      * Pages collection
@@ -299,12 +297,12 @@ class Zend_Pdf
      *
      * If $source is a string and $load is true, then it loads document
      * from a file.
-
      * $revision used to roll back document to specified version
      * (0 - current version, 1 - previous version, 2 - ...)
      *
      * @param string  $source - PDF file to load
      * @param integer $revision
+     * @param bool    $load
      * @throws Zend_Pdf_Exception
      * @return Zend_Pdf
      */
@@ -330,6 +328,7 @@ class Zend_Pdf
 
             $this->_loadNamedDestinations($this->_trailer->Root, $this->_parser->getPDFVersion());
             $this->_loadOutlines($this->_trailer->Root);
+            $this->_loadJavaScript($this->_trailer->Root);
 
             if ($this->_trailer->Info !== null) {
                 $this->properties = $this->_trailer->Info->toPhp();
@@ -442,12 +441,12 @@ class Zend_Pdf
         $this->_loadPages($this->_trailer->Root->Pages);
     }
 
-
     /**
      * Load pages recursively
      *
      * @param Zend_Pdf_Element_Reference $pages
-     * @param array|null $attributes
+     * @param array|null                 $attributes
+     * @throws Zend_Pdf_Exception
      */
     protected function _loadPages(Zend_Pdf_Element_Reference $pages, $attributes = array())
     {
@@ -536,6 +535,7 @@ class Zend_Pdf
      * Load outlines recursively
      *
      * @param Zend_Pdf_Element_Reference $root Document catalog entry
+     * @throws Zend_Pdf_Exception
      */
     protected function _loadOutlines(Zend_Pdf_Element_Reference $root)
     {
@@ -572,6 +572,30 @@ class Zend_Pdf
 
         if ($root->Outlines->Count !== null) {
             $this->_originalOpenOutlinesCount = $root->Outlines->Count->value;
+        }
+    }
+
+    /**
+     * Load JavaScript
+     *
+     * Populates the _javaScript string, for later use of getJavaScript method.
+     *
+     * @param Zend_Pdf_Element_Reference $root Document catalog entry
+     */
+    protected function _loadJavaScript(Zend_Pdf_Element_Reference $root)
+    {
+        if (null === $root->Names || null === $root->Names->JavaScript
+            || null === $root->Names->JavaScript->Names
+        ) {
+            return;
+        }
+
+        foreach ($root->Names->JavaScript->Names->items as $item) {
+            if ($item instanceof Zend_Pdf_Element_Reference
+                && $item->S->value === 'JavaScript'
+            ) {
+                $this->_javaScript[] = $item->JS->value;
+            }
         }
     }
 
@@ -916,8 +940,9 @@ class Zend_Pdf
     /**
      * Set specified named destination
      *
-     * @param string $name
-     * @param Zend_Pdf_Destination_Explicit|Zend_Pdf_Action_GoTo $target
+     * @param string                                             $name
+     * @param Zend_Pdf_Destination_Explicit|Zend_Pdf_Action_GoTo $destination
+     * @throws Zend_Pdf_Exception
      */
     public function setNamedDestination($name, $destination = null)
     {
@@ -975,8 +1000,8 @@ class Zend_Pdf
      *
      * Returns Zend_Pdf_Page page object or null if destination is not found within PDF document.
      *
-     * @param Zend_Pdf_Destination $destination  Destination to resolve
-     * @param boolean $refreshPagesHash  Refresh page collection hashes before processing
+     * @param Zend_Pdf_Destination $destination Destination to resolve
+     * @param bool $refreshPageCollectionHashes Refresh page collection hashes before processing
      * @return Zend_Pdf_Page|null
      * @throws Zend_Pdf_Exception
      */
@@ -1034,7 +1059,7 @@ class Zend_Pdf
      * @todo Give appropriate name and make method public
      *
      * @param Zend_Pdf_Action $action
-     * @param boolean $refreshPagesHash  Refresh page collection hashes before processing
+     * @param bool $refreshPageCollectionHashes Refresh page collection hashes before processing
      * @return Zend_Pdf_Action|null
      */
     protected function _cleanUpAction(Zend_Pdf_Action $action, $refreshPageCollectionHashes = true)
@@ -1129,6 +1154,7 @@ class Zend_Pdf
      *
      * $fontName should be specified in UTF-8 encoding
      *
+     * @param string $fontName
      * @return Zend_Pdf_Resource_Font_Extracted|null
      * @throws Zend_Pdf_Exception
      */
@@ -1386,17 +1412,84 @@ class Zend_Pdf
         }
     }
 
-
     /**
-     * Set the document-level JavaScript
+     * Sets the document-level JavaScript
      *
-     * @param string $javascript
+     * Resets and appends
+     *
+     * @param string|array $javaScript
      */
-    public function setJavaScript($javascript)
+    public function setJavaScript($javaScript)
     {
-        $this->_javaScript = $javascript;
+        $this->resetJavaScript();
+
+        $this->addJavaScript($javaScript);
     }
 
+    /**
+     * Resets the document-level JavaScript
+     */
+    public function resetJavaScript()
+    {
+        $this->_javaScript = null;
+
+        $root = $this->_trailer->Root;
+        if (null === $root->Names || null === $root->Names->JavaScript) {
+            return;
+        }
+        $root->Names->JavaScript = null;
+    }
+
+    /**
+     * Appends JavaScript to the document-level JavaScript
+     *
+     * @param string|array $javaScript
+     * @throws Zend_Pdf_Exception
+     */
+    public function addJavaScript($javaScript)
+    {
+        if (empty($javaScript)) {
+            throw new Zend_Pdf_Exception(
+                'JavaScript must be a non empty string or array of strings'
+            );
+        }
+
+        if (!is_array($javaScript)) {
+            $javaScript = array($javaScript);
+        }
+
+        if (null === $this->_javaScript) {
+            $this->_javaScript = $javaScript;
+        } else {
+            $this->_javaScript = array_merge($this->_javaScript, $javaScript);
+        }
+
+        if (!empty($this->_javaScript)) {
+            $items = array();
+
+            foreach ($this->_javaScript as $javaScript) {
+                $jsCode = array(
+                    'S'  => new Zend_Pdf_Element_Name('JavaScript'),
+                    'JS' => new Zend_Pdf_Element_String($javaScript)
+                );
+                $items[] = new Zend_Pdf_Element_String('EmbeddedJS');
+                $items[] = $this->_objFactory->newObject(
+                    new Zend_Pdf_Element_Dictionary($jsCode)
+                );
+            }
+
+            $jsRef = $this->_objFactory->newObject(
+                new Zend_Pdf_Element_Dictionary(
+                    array('Names' => new Zend_Pdf_Element_Array($items))
+                )
+            );
+
+            if (null === $this->_trailer->Root->Names) {
+                $this->_trailer->Root->Names = new Zend_Pdf_Element_Dictionary();
+            }
+            $this->_trailer->Root->Names->JavaScript = $jsRef;
+        }
+    }
 
     /**
      * Convert date to PDF format (it's close to ASN.1 (Abstract Syntax Notation

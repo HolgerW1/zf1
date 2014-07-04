@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate_File
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -47,7 +47,7 @@ require_once 'Zend/Validate/File/WordCountTest.php';
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  * @group      Zend_Validate_File
@@ -66,6 +66,7 @@ class Zend_Validate_File_AllTests
         $suite->addTestSuite('Zend_Validate_File_CountTest');
         $suite->addTestSuite('Zend_Validate_File_Crc32Test');
         $suite->addTestSuite('Zend_Validate_File_ExcludeExtensionTest');
+        $suite->addTestSuite('Zend_Validate_File_ExcludeMimeTypeTest');
         $suite->addTestSuite('Zend_Validate_File_ExistsTest');
         $suite->addTestSuite('Zend_Validate_File_ExtensionTest');
         $suite->addTestSuite('Zend_Validate_File_FilesSizeTest');

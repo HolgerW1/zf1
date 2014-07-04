@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -33,7 +33,7 @@ require_once 'Zend/Loader/PluginLoader.php';
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Loader
  */
@@ -114,7 +114,7 @@ class Zend_Loader_PluginLoaderTest extends PHPUnit_Framework_TestCase
                ->addPrefixPath('Zend_Loader', $this->libPath . '/Zend/Loader');
         $paths = $loader->getPaths();
 
-        $this->assertType('array', $paths);
+        $this->assertTrue(is_array($paths));
         $this->assertEquals(1, count($paths['Zend_Loader_']));
     }
 
@@ -505,7 +505,7 @@ class Zend_Loader_PluginLoaderTest extends PHPUnit_Framework_TestCase
             $loader->removePrefixPath('My_Namespace_', 'ZF9721');
             $this->fail();
         } catch (Exception $e) {
-            $this->assertType('Zend_Loader_PluginLoader_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Loader_PluginLoader_Exception);
             $this->assertContains('Prefix My_Namespace_ / Path ZF9721', $e->getMessage());
         }
         $this->assertEquals(1, count($loader->getPaths('My_Namespace_')));

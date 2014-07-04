@@ -482,18 +482,6 @@
                 </entry>
             </row>
             <row>
-                <entry>
-                    <emphasis>
-                        <ulink
-                            url="&zf.manual.link;/zend.infocard.html">
-                            <classname>Zend_InfoCard</classname>
-                        </ulink>
-                    </emphasis>
-                </entry>
-                <entry>---</entry>
-                <entry>---</entry>
-            </row>
-            <row>
                 <entry morerows="1" valign="middle">
                     <emphasis>
                         <ulink
@@ -989,18 +977,6 @@
                     <ulink
                         url="&php.manual.link;/ref.libxml.php">libxml</ulink>
                 </entry>
-            </row>
-            <row>
-                <entry>
-                    <emphasis>
-                        <ulink
-                            url="&zf.manual.link;/zend.service.nirvanix.html">
-                            <classname>Zend_Service_Nirvanix</classname>
-                        </ulink>
-                    </emphasis>
-                </entry>
-                <entry>---</entry>
-                <entry>---</entry>
             </row>
             <row>
                 <entry>

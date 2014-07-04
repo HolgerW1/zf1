@@ -839,12 +839,6 @@
                         <entry><ulink url="http://www.php.net/manual/en/ref.mime-magic.php"><code>mime_magic</code></ulink></entry>
                     </row>
                     <row>
-                        <entry><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.infocard.html"><code>Zend_InfoCard</code></ulink></emphasis></entry>
-                        <entry>---</entry>
-                        <entry>---</entry>
-                        <entry>---</entry>
-                    </row>
-                    <row>
                         <entry morerows="1" valign="middle"><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.json.html"><code>Zend_Json</code></ulink></emphasis></entry>
                         <entry>Słaba</entry>
                         <entry>---</entry>
@@ -1053,12 +1047,6 @@
                         <entry><ulink url="http://www.php.net/manual/en/ref.libxml.php"><code>libxml</code></ulink></entry>
                     </row>
                     <row>
-                        <entry><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.service.nirvanix.html"><code>Zend_Service_Nirvanix</code></ulink></emphasis></entry>
-                        <entry>---</entry>
-                        <entry>---</entry>
-                        <entry>---</entry>
-                    </row>
-                    <row>
                         <entry><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.service.slideshare.html"><code>Zend_Service_SlideShare</code></ulink></emphasis></entry>
                         <entry>---</entry>
                         <entry>---</entry>
@@ -1218,9 +1206,6 @@
                     <row>
                         <entry morerows="4" valign="middle">Słaba</entry>
                         <entry><ulink url="http://framework.zend.com/manual/en/zend.db.html"><code>Zend_Db</code></ulink></entry>
-                    </row>
-                    <row>
-                        <entry><ulink url="http://framework.zend.com/manual/en/zend.infocard.html"><code>Zend_InfoCard</code></ulink></entry>
                     </row>
                     <row>
                         <entry><ulink url="http://framework.zend.com/manual/en/zend.ldap.html"><code>Zend_Ldap</code></ulink></entry>
@@ -1405,11 +1390,6 @@
                     </row>
                     <row>
                         <entry><ulink url="http://framework.zend.com/manual/en/zend.uri.html"><code>Zend_Uri</code></ulink></entry>
-                    </row>
-                    <row>
-                        <entry><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.infocard.html"><code>Zend_InfoCard</code></ulink></emphasis></entry>
-                        <entry>Silna</entry>
-                        <entry><ulink url="http://framework.zend.com/manual/en/zend.loader.html"><code>Zend_Loader</code></ulink></entry>
                     </row>
                     <row>
                         <entry><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.json.html"><code>Zend_Json</code></ulink></emphasis></entry>
@@ -1615,17 +1595,6 @@
                         <entry><ulink url="http://framework.zend.com/manual/en/zend.validate.html"><code>Zend_Validate</code></ulink></entry>
                     </row>
                     <row>
-                        <entry morerows="2" valign="middle"><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.service.nirvanix.html"><code>Zend_Service_Nirvanix</code></ulink></emphasis></entry>
-                        <entry morerows="2" valign="middle">Silna</entry>
-                        <entry><ulink url="http://framework.zend.com/manual/en/zend.exception.html"><code>Zend_Exception</code></ulink></entry>
-                    </row>
-                    <row>
-                        <entry><ulink url="http://framework.zend.com/manual/en/zend.http.html"><code>Zend_Http</code></ulink></entry>
-                    </row>
-                    <row>
-                        <entry><ulink url="http://framework.zend.com/manual/en/zend.loader.html"><code>Zend_Loader</code></ulink></entry>
-                    </row>
-                    <row>
                         <entry morerows="2" valign="middle"><emphasis role="strong"><ulink url="http://framework.zend.com/manual/en/zend.service.slideshare.html"><code>Zend_Service_SlideShare</code></ulink></emphasis></entry>
                         <entry morerows="2" valign="middle">Silna</entry>
                         <entry><ulink url="http://framework.zend.com/manual/en/zend.cache.html"><code>Zend_Cache</code></ulink></entry>
@@ -1811,7 +1780,6 @@ Filter
 Form
 Gdata
 Http
-InfoCard
 Json
 Layout
 Ldap
@@ -1834,7 +1802,6 @@ Service_Amazon
 Service_Audioscrobbler
 Service_Delicious
 Service_Flickr
-Service_Nirvanix
 Service_SlideShare
 Service_StrikeIron
 Service_Technorati

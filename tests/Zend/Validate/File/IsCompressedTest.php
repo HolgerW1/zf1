@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate_File
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -36,7 +36,7 @@ require_once 'Zend/Validate/File/IsCompressed.php';
  * @category   Zend
  * @package    Zend_Validate_File
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  */
@@ -199,7 +199,12 @@ class Zend_Validate_File_IsCompressedTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('This PHP Version has no finfo installed');
         }
 
-        $magicFile = dirname(__FILE__) . '/_files/magic.mime';
+        if (version_compare(PHP_VERSION, '5.3', '>=')) {
+            $magicFile = dirname(__FILE__) . '/_files/magic-php53.mime';
+        } else {
+            $magicFile = dirname(__FILE__) . '/_files/magic.mime';
+        }
+
         $validator = new Zend_Validate_File_IsCompressed(array(
             'image/gif',
             'image/jpg',

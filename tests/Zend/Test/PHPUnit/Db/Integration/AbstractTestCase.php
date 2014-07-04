@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Test
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -26,8 +26,6 @@ require_once "Zend/Db/Table.php";
 
 require_once "Zend/Test/PHPUnit/Db/DataSet/DbTableDataSet.php";
 
-require_once "PHPUnit/Extensions/Database/DataSet/FlatXmlDataSet.php";
-
 require_once "Zend/Test/PHPUnit/Db/SimpleTester.php";
 
 require_once "Zend/Test/PHPUnit/Db/DataSet/DbRowset.php";
@@ -36,7 +34,7 @@ require_once "Zend/Test/PHPUnit/Db/DataSet/DbRowset.php";
  * @category   Zend
  * @package    Zend_Test
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Test
  */
@@ -76,7 +74,12 @@ abstract class Zend_Test_PHPUnit_Db_Integration_AbstractTestCase extends PHPUnit
         $xmlDataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
             dirname(__FILE__)."/_files/sqliteIntegrationFixture.xml"
         );
-        $this->assertTrue($xmlDataSet->assertEquals($dataSet));
+
+        if (method_exists($xmlDataSet, 'assertEquals')) {
+            $this->assertTrue($xmlDataSet->assertEquals($dataSet));
+        } else {
+            $this->assertTrue($xmlDataSet->matches($dataSet));
+        }
     }
 
     /**
@@ -103,7 +106,11 @@ abstract class Zend_Test_PHPUnit_Db_Integration_AbstractTestCase extends PHPUnit
         $this->assertEquals(3, count($rows));
 
         $rowsetTable = new Zend_Test_PHPUnit_Db_DataSet_DbRowset($rows);
-        $rowsetTable->assertEquals($fooDataTable);
+        if (method_exists($rowsetTable, 'assertEquals')) {
+            $rowsetTable->assertEquals($fooDataTable);
+        } else {
+            $rowsetTable->matches($fooDataTable);
+        }
     }
 
     /**

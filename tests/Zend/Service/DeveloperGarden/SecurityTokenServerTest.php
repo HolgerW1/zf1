@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_DeveloperGarden
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -40,7 +40,7 @@ require_once 'Zend/Service/DeveloperGarden/SecurityTokenServer/Cache.php';
  * @category   Zend
  * @package    Zend_Service_DeveloperGarden
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -80,20 +80,17 @@ class Zend_Service_DeveloperGarden_SecurityTokenServerTest extends PHPUnit_Frame
     public function testGetTokens()
     {
         $soap = $this->service->getSoapClient();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_Soap',
-            $soap
+        $this->assertTrue(
+            $soap instanceof Zend_Service_DeveloperGarden_Client_Soap
         );
 
         $tokens = $this->service->getTokens();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_GetTokensResponse',
-            $tokens
+        $this->assertTrue(
+            $tokens instanceof Zend_Service_DeveloperGarden_Response_SecurityTokenServer_GetTokensResponse
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse',
-            $tokens->securityToken
+        $this->assertTrue(
+            $tokens->securityToken instanceof Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse
         );
         $this->assertNotNull(
             'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse',
@@ -118,23 +115,20 @@ class Zend_Service_DeveloperGarden_SecurityTokenServerTest extends PHPUnit_Frame
         $this->assertNull(
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setCache($cache)
         );
-        $this->assertType(
-            'Zend_Cache_Core',
-            Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::getCache()
+        $this->assertTrue(
+            Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::getCache() instanceof Zend_Cache_Core
         );
 
         Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::resetTokenCache();
         Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::clearCache();
 
         $tokens = $this->service->getTokens();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_GetTokensResponse',
-            $tokens
+        $this->assertTrue(
+            $tokens instanceof Zend_Service_DeveloperGarden_Response_SecurityTokenServer_GetTokensResponse
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse',
-            $tokens->securityToken
+        $this->assertTrue(
+            $tokens->securityToken instanceof Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse
         );
         $this->assertNotNull(
             'Zend_Service_DeveloperGarden_Response_SecurityTokenServer_SecurityTokenResponse',

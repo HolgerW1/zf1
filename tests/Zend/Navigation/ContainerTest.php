@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Navigation
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -31,7 +31,7 @@ require_once 'Zend/Controller/Request/Http.php';
  * @category   Zend
  * @package    Zend_Navigation
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Navigation
  */
@@ -1259,5 +1259,29 @@ class Zend_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
         $container = new Zend_Navigation();
 
         $this->assertEquals(null, $container->getChildren());
+    }
+
+    public function testRemovePageRecursively()
+    {
+        $container = new Zend_Navigation(array(
+            array(
+                'route' => 'foo',
+                'pages' => array(
+                    array(
+                        'route' => 'bar',
+                        'pages' => array(
+                            array(
+                                'route' => 'baz',
+                            ),
+                        ),
+                    )
+                )
+            ),
+        ));
+
+        $container->removePage($container->findOneBy('route', 'baz'), true);
+        $this->assertNull($container->findOneBy('route', 'baz'));
+        $container->removePage($container->findOneBy('route', 'bar'), true);
+        $this->assertNull($container->findOneBy('route', 'bar'));
     }
 }

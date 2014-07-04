@@ -1,12 +1,116 @@
+![Logo](http://framework.zend.com/images/logos/ZendFramework-logo.png)
+
 Welcome to the Zend Framework 1.12 Release! 
 
-Master: [![Build Status](https://www.travis-ci.org/zendframework/zf1.png?branch=master)](https://www.travis-ci.org/zendframework/zf1)
+Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=master)](https://travis-ci.org/zendframework/zf1)
 
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.4dev Release ([INSERT REV NUM HERE]).
-Released on <Month> <Day>, <Year>.
+Zend Framework 1.12.8dev Release.
+Released on MMMMM DD, YYYY.
+
+IMPORTANT FIXES FOR 1.12.8dev
+-----------------------------
+
+- [#375](https://github.com/zendframework/zf1/pull/375) Implement
+  Zend_Pdf::setJavascript(), Zend_Pdf::addJavascript() and
+  Zend_Pdf::resetJavaScript()
+- ...
+
+SECURITY FIXES FOR 1.12.7
+-------------------------
+
+- **ZF2014-04:** Potential SQL Injection (SQLi) attack via ORDER expessions:
+  `Zend\Db\Select`'s `order()` method allwed passing function calls, but
+  did not provide checks to prevent SQLi vectors. As an example:
+
+  ```php
+  $select = $db->select()->order('MD5(1); select...');
+  ```
+
+  could be entered.
+
+  If you use `Zend\Db\Select` with ORDER clauses, we strongly urge that you
+  upgrade immediately.
+
+IMPORTANT FIXES FOR 1.12.7
+--------------------------
+
+- [#331](https://github.com/zendframework/zf1/pull/331) and
+  [#376](https://github.com/zendframework/zf1/pull/376) provide support
+  for PHPUnit 4 and 4.1, respectively, both within the Zend Framework test suite
+  and inside the `Zend_Test_PHPUnit` component.
+- [#333](https://github.com/zendframework/zf1/pull/333) backports recursive
+  page removal within `Zend_Navigation` from Zend Framework 2.
+- [#343](https://github.com/zendframework/zf1/pull/343) updates the `Hostname`
+  validator to support the new IANA top level domains.
+- Forward-compatibility changes were made to ensure Zend Framework 1 will run on
+  the upcoming PHP 5.6.
+
+
+IMPORTANT FIXES FOR 1.12.6
+--------------------------
+
+- [#307](https://github.com/zendframework/zf1/pull/307) fixes a backwards
+  compatibility break in the `Zend_Locale` component. 1.12.4 updated the
+  [CLDR](http://cldr.unicode.org) version used by Zend Framework 1, which
+  resulted in the removal of several locales we previously supported. The patch
+  in #307 adds locale aliases for these to the new locales supported in recent
+  versions of the CLDR, ensuring backwards compatibility for ZF1 users.
+
+SECURITY FIXES FOR 1.12.4
+-------------------------
+
+- **ZF2014-01:** Potential XXE/XEE attacks using PHP functions:
+  `simplexml_load_*`, `DOMDocument::loadXML`, and `xml_parse`. A new component,
+  `Zend_Xml`, was introduced to mitigate XML eXternal Entity and XML Entity
+  Expansion vectors that are present in older versions of libxml2 and/or PHP.
+  Components that could contain these vectors include:
+
+    - `Zend_Amf`
+    - `Zend_Config`
+    - `Zend_Dom`
+    - `Zend_Feed`
+    - `Zend_Gdata`
+    - `Zend_Json`
+    - `Zend_Locale`
+    - `Zend_Mobile_Push`
+    - `Zend_Rest_Client`
+    - `Zend_Search_Lucene`
+    - `Zend_Serializer_Adapter_Wddx`
+    - `Zend_Service_Amazon`
+    - `Zend_Service_AudioScrobbler`
+    - `Zend_Service_Delicious`
+    - `Zend_Service_Ebay`
+    - `Zend_Service_Flickr`
+    - `Zend_Service_SlideShare`
+    - `Zend_Service_SqlAzure`
+    - `Zend_Service_Technorati`
+    - `Zend_Service_WindowsAzure`
+    - `Zend_Service_Yahoo`
+    - `Zend_Soap`
+    - `Zend_Translate`
+
+  If you use one or more of these components, we strongly urge that you upgrade
+  immediately.
+
+- **ZF2014-02:** Potential security issue in login mechanism of `Zend_OpenId`
+  consumer. Using the Consumer component in conjunction with a malicious OpenID
+  provider, one could login to a service using an arbitrary OpenID Identity
+  without requiring credentials, allowing impersonation of an OpenID Identity.
+  If you use this component, we strongly urge that you upgrade immediately.
+
+IMPORTANT FIXES FOR 1.12.4
+--------------------------
+
+
+- [#221](https://github.com/zendframework/zf1/pull/221) removes the TinySrc view
+  helper, as the TinySrc service no longer exists.
+- [#222](https://github.com/zendframework/zf1/pull/222) removes the InfoCard
+  component, as the CardSpace service no longer exists.
+- [#271](https://github.com/zendframework/zf1/pull/271) removes the Nirvanix
+  component, as the Nirvanix service shut down in October 2013.
 
 IMPORTANT FIXES FOR 1.12.3
 --------------------------
@@ -190,9 +294,9 @@ We’d like to particularly thank Adam Lundrigan, Frank Brückner and
 Martin Hujer for their efforts in making this happen. Thanks also to the
 many people who ran the ZF1 unit tests and reported their results!
 
-For a complete list, visit:
+For a complete list of closed issues beginning with 1.12.3, visit:
 
- * http://framework.zend.com/issues/secure/IssueNavigator.jspa?requestId=12877
+ * https://github.com/zendframework/zf1/issues?labels=&milestone=&page=1&state=closed
  * http://framework.zend.com/changelog/
 
 MIGRATION NOTES

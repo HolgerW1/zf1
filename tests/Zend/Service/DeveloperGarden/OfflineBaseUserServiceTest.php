@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_DeveloperGarden
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -35,7 +35,7 @@ require_once 'Zend/Service/DeveloperGarden/BaseUserService.php';
  * @category   Zend
  * @package    Zend_Service_DeveloperGarden
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -76,7 +76,7 @@ class Zend_Service_DeveloperGarden_OfflineBaseUserServiceTest extends PHPUnit_Fr
     public function testGetModuleIds()
     {
         $ids = $this->service->getModuleIds();
-        $this->assertType('array', $ids);
+        $this->assertTrue(is_array($ids));
         $this->assertNotNull($ids);
         $this->assertGreaterThan(0, count($ids));
     }
@@ -131,7 +131,7 @@ class Zend_Service_DeveloperGarden_OfflineBaseUserServiceTest extends PHPUnit_Fr
     public function testModuleIds()
     {
         $moduleIds = $this->service->getModuleIds();
-        $this->assertType('array', $moduleIds);
+        $this->assertTrue(is_array($moduleIds));
         $this->assertEquals(10, count($moduleIds));
     }
 
@@ -160,9 +160,8 @@ class Zend_Service_DeveloperGarden_OfflineBaseUserServiceTest extends PHPUnit_Fr
             $this->markTestSkipped('SOAP extension is not loaded');
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Credential',
-            $this->service->getSoapClient()->getCredential()
+        $this->assertTrue(
+            $this->service->getSoapClient()->getCredential() instanceof Zend_Service_DeveloperGarden_Credential
         );
     }
 
@@ -172,9 +171,8 @@ class Zend_Service_DeveloperGarden_OfflineBaseUserServiceTest extends PHPUnit_Fr
             $this->markTestSkipped('SOAP extension is not loaded');
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_SecurityTokenServer',
-            $this->service->getSoapClient()->getTokenService()
+        $this->assertTrue(
+            $this->service->getSoapClient()->getTokenService() instanceof Zend_Service_DeveloperGarden_SecurityTokenServer
         );
     }
 }
