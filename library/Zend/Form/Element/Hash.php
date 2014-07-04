@@ -122,12 +122,9 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
     public function initCsrfValidator()
     {
         $session = $this->getSession();
-        if (isset($session->hashes) && isset($session->hashes[$this->_salt])) {
-            $rightHash = $session->hashes[$this->_salt];
-        } else {
-            $rightHash = null;
-        }
-
+        $sessionVar = $this->_salt;
+        $rightHash  = isset($session->$sessionVar) ? $session->$sessionVar : null;
+        
         $this->addValidator('Identical', true, array($rightHash));
         return $this;
     }
@@ -227,14 +224,12 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
      */
     public function initCsrfToken()
     {
+        $sessionVar = $this->_salt;
         $session = $this->getSession();
-        $session->setExpirationHops(1, null, true);
-        $session->setExpirationSeconds($this->getTimeout());
+        $session->setExpirationHops(1, $sessionVar, true);
+        $session->setExpirationSeconds($this->getTimeout(), $sessionVar);
         
-        if (!isset($session->hashes)) {
-            $session->hashes = array();
-        }
-        $session->hashes[$this->_salt] = $this->getHash();
+        $session->$sessionVar = $this->getHash();
     }
 
     /**

@@ -66,7 +66,6 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         }
 
         $session = new Zend_Form_Element_HashTest_SessionContainer();
-        $session->hashes = null;
 
         $this->element = new Zend_Form_Element_Hash('foo', array(
                 'session' => $session,
@@ -111,6 +110,8 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
     public function testSessionHashNameCollision()
     {
         $session = $this->element->getSession();
+        $sessionVar = $this->element->getSalt();
+        
         $this->element->initCsrfToken();
         $this->element->initCsrfValidator();
         $hash = $this->element->getHash();
@@ -122,7 +123,7 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $newElement->initCsrfToken();
         $newElement->initCsrfValidator();
         
-        $this->assertEquals($hash, $session->hashes[$this->element->getSalt()]);        
+        $this->assertEquals($hash, $session->$sessionVar);
     }
 
     public function testSaltChangesHash()
@@ -208,20 +209,23 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $this->_checkZf2794();
 
         $session = $this->element->getSession();
-        $session->hashes = array(self::HASH_SALT => $this->element->getHash());
+        $sessionVar = self::HASH_SALT;
+        $session->$sessionVar = $this->element->getHash();
+        
         $element = new Zend_Form_Element_Hash('foo', array('session' => $session, 'salt' => self::HASH_SALT));
         $validator = $element->getValidator('Identical');
-        $this->assertEquals($session->hashes[self::HASH_SALT], $validator->getToken());
+        $this->assertEquals($session->$sessionVar, $validator->getToken());
     }
 
     public function testRenderInitializesSessionHashToken()
     {
         $session = $this->element->getSession();
-        $this->assertNull($session->hashes);
+        $sessionVar = $this->element->getSalt();
+        
+        $this->assertNull($session->$sessionVar);
         $html = $this->element->render($this->getView());
 
-        $this->assertNotNull($session->hashes);
-        $this->assertEquals($this->element->getHash(), $session->hashes[self::HASH_SALT]);
+        $this->assertEquals($this->element->getHash(), $session->$sessionVar);
         $this->assertEquals(1, $session->setExpirationHops);
         $this->assertEquals($this->element->getTimeout(), $session->setExpirationSeconds);
     }
@@ -264,33 +268,26 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
 
 class Zend_Form_Element_HashTest_SessionContainer
 {
-    protected static $_hashes;
+    protected $_data = array();
 
     public function & __get($name)
     {
-        if ('hashes' == $name) {
-            return self::$_hashes;
-        }
-
-        return null;
+        return $this->_data[$name];
     }
 
     public function __set($name, $value)
     {
-        if ('hashes' == $name) {
-            self::$_hashes = $value;
-        } else {
-            $this->$name = $value;
-        }
+        $this->_data[$name] = $value;
     }
 
     public function __isset($name)
     {
-        if (('hashes' == $name) && (null !== self::$_hashes))  {
-            return true;
-        }
-
-        return false;
+        return isset($this->_data[$name]);
+    }
+    
+    public function __unset($name)
+    {
+        unset($this->_data[$name]);
     }
 
     public function __call($method, $args)
@@ -302,6 +299,11 @@ class Zend_Form_Element_HashTest_SessionContainer
                 break;
             default:
         }
+    }
+    
+    public function __toString()
+    {
+        return var_export($this->_data, true);
     }
 }
 
